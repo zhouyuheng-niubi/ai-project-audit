@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>确认启动 - AI 项目体检</title>
-  <meta name="description" content="确认 AI 项目体检套餐、项目背景和时间偏好，生成启动确认邮件。">
+  <meta name="description" content="确认 AI 项目体检或 AI Coding 项目急诊套餐、项目背景和时间偏好，生成启动确认邮件。">
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -122,6 +122,17 @@
       color: #603b00;
       border-radius: 8px;
     }
+    .slot {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      background: var(--green-soft);
+      border: 1px solid #b7d9cb;
+      border-radius: 8px;
+      color: #0f4937;
+    }
+    .slot strong { font-size: 18px; }
+    .slot .button { justify-self: start; }
     .error {
       display: none;
       padding: 12px;
@@ -195,8 +206,8 @@
 
   <section class="hero">
     <div class="wrap">
-      <h1>确认要启动体检后，再发送启动邮件。</h1>
-      <p class="lead">这里不会展示支付二维码，也不会提交数据到服务器。填写后会在你的邮件客户端生成确认邮件，由你亲自发送。</p>
+      <h1>确认要启动体检后，用邮件锁定服务范围。</h1>
+      <p class="lead">这里不会展示支付二维码，也不会提交数据到服务器。填写后会在你的邮件客户端生成确认邮件；我先判断是否适合，适合后再回发支付材料。</p>
     </div>
   </section>
 
@@ -204,6 +215,12 @@
     <section class="panel">
       <h2>选择套餐</h2>
       <form id="purchase-form" novalidate>
+        <div class="slot" id="intent-panel">
+          <strong>今天最适合先发起：999 元 AI Coding / Agent / RAG 项目急诊</strong>
+          <p>如果项目已经卡住，先把背景、卡点、已有资料类型发来。适合做体检时再付款；不适合会直接说明，不消耗你的时间。</p>
+          <a class="button" href="mailto:957017253@qq.com?subject=%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A&body=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A%E3%80%82%0A%0A%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%EF%BC%9A%0A%E5%BD%93%E5%89%8D%E5%8D%A1%E7%82%B9%EF%BC%9A%0A%E5%B7%B2%E6%9C%89%E8%B5%84%E6%96%99%EF%BC%9A%0A%E5%B8%8C%E6%9C%9B%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%9A%0A%0A%E8%AF%B7%E5%85%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E9%80%82%E5%90%88%E4%BD%93%E6%A3%80%EF%BC%8C%E9%80%82%E5%90%88%E5%90%8E%E5%86%8D%E5%8F%91%E9%80%81%E6%94%AF%E4%BB%98%E6%9D%90%E6%96%99%E3%80%82">直接发起急诊邮件</a>
+        </div>
+
         <div class="choices">
           <label class="choice"><input type="radio" name="package" value="999 元 / 2 小时体检" checked><span>2 小时体检<strong>999 元</strong><small>问题清单、风险点、3-5 个下一步动作。</small></span></label>
           <label class="choice"><input type="radio" name="package" value="1999 元 / 半天深度体检"><span>半天深度体检<strong>1999 元</strong><small>体检报告、优先级路线、AI 工具链建议。</small></span></label>
@@ -228,6 +245,7 @@
               <option>公开页面</option>
               <option>朋友转介绍</option>
               <option>邮件沟通后确认</option>
+              <option>AI Coding 急诊页</option>
               <option>V2EX / 平台投递</option>
               <option>其他</option>
             </select>
@@ -267,7 +285,7 @@
       <ul>
         <li>我会先确认项目是否适合该套餐。</li>
         <li>确认适合后再发送支付材料。</li>
-        <li>付款后按约定时间开始体检。</li>
+        <li>付款后按约定时间开始体检；付款前不要求账号密码、密钥或支付账户。</li>
       </ul>
     </aside>
   </main>
@@ -281,6 +299,7 @@
     const preview = document.getElementById("preview");
     const errorBox = document.getElementById("error");
     const copyBtn = document.getElementById("copy-btn");
+    const params = new URLSearchParams(window.location.search);
 
     function value(id) {
       return document.getElementById(id).value.trim();
@@ -314,6 +333,12 @@
       preview.textContent = buildBody();
     }
 
+    function applyIntent() {
+      if (params.get("intent") !== "coding-urgent") return;
+      document.getElementById("source").value = "AI Coding 急诊页";
+      document.getElementById("time").placeholder = "例如：今天晚些时候 / 明天上午 / 本周内";
+    }
+
     form.addEventListener("input", updatePreview);
 
     form.addEventListener("submit", (event) => {
@@ -338,6 +363,7 @@
       }
     });
 
+    applyIntent();
     updatePreview();
   </script>
 </body>
