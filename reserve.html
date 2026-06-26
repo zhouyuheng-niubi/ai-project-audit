@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>申请支付材料 - AI 项目体检</title>
+  <meta name="description" content="确认 AI 项目体检、AI Coding 项目急诊或 99 元模板包购买意向，生成申请支付材料邮件。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --ink: #172033;
+      --muted: #566273;
+      --surface: #fff;
+      --line: #d8e0ea;
+      --green: #17604a;
+      --green-soft: #e6f3ee;
+      --blue: #2458a6;
+      --amber: #8d5a00;
+      --amber-soft: #fff4d7;
+      --red: #a43820;
+      --red-soft: #fff0ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #132238;
+      color: #fff;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { font-weight: 850; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 14px; font-size: 14px; color: #d9e5f3; }
+    .nav-links a { color: inherit; text-decoration: none; }
+    .hero {
+      background: #132238;
+      color: #fff;
+      padding: 36px 0;
+    }
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    h1 { max-width: 820px; font-size: clamp(32px, 5vw, 54px); line-height: 1.08; }
+    h2 { font-size: 25px; margin-bottom: 14px; }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    p { margin: 0 0 10px; }
+    .lead { max-width: 760px; margin-top: 16px; color: #d9e5f3; font-size: 18px; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      padding: 22px 0 42px;
+    }
+    .panel, .side, .choice {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .panel { padding: 18px; }
+    .side { padding: 16px; align-self: start; position: sticky; top: 16px; }
+    form { display: grid; gap: 16px; }
+    .field { display: grid; gap: 6px; }
+    label { font-weight: 850; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+    }
+    .choice {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 8px;
+      min-height: 122px;
+      padding: 12px;
+      cursor: pointer;
+    }
+    .choice input { width: 18px; height: 18px; margin: 3px 0 0; }
+    .choice strong { display: block; color: var(--green); font-size: 22px; margin: 4px 0; }
+    .choice small { display: block; color: var(--muted); }
+    input, select, textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      padding: 9px 10px;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .notice {
+      padding: 12px;
+      background: var(--amber-soft);
+      border: 1px solid #ecd391;
+      color: #603b00;
+      border-radius: 8px;
+    }
+    .error {
+      display: none;
+      padding: 12px;
+      background: var(--red-soft);
+      border: 1px solid #efb5a9;
+      color: var(--red);
+      border-radius: 8px;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    button, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    button.secondary, .button.secondary { background: #fff; color: var(--green); }
+    pre {
+      white-space: pre-wrap;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #273449;
+      font-size: 14px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    footer { padding: 18px 0 34px; color: var(--muted); text-align: center; font-size: 14px; }
+    @media (max-width: 900px) {
+      main, .grid, .choices { grid-template-columns: 1fr; }
+      .side { position: static; }
+      nav { align-items: flex-start; flex-direction: column; }
+      .hero { padding: 30px 0; }
+      button, .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav aria-label="页面导航">
+        <div class="brand">周宇恒｜AI 项目体检</div>
+        <div class="nav-links">
+          <a href="./index.html">服务首页</a>
+          <a href="./coding.html">项目急诊</a>
+          <a href="./template.html">模板包</a>
+          <a href="./purchase.html">确认启动</a>
+          <a href="./intake.html">提交背景</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>已经确认要买时，直接申请支付材料。</h1>
+      <p class="lead">本页不会展示收款码，也不会把数据提交到服务器。填写后生成邮件；我确认服务范围后回发微信或支付宝支付材料。</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel">
+      <h2>选择要付款的项目</h2>
+      <form id="reserve-form" novalidate>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="package" value="99 元 / AI 项目体检自查模板包"><span>自查模板包<strong>99 元</strong><small>资料收集表、报告模板、脱敏样例和风险清单。</small></span></label>
+          <label class="choice"><input type="radio" name="package" value="999 元 / 2 小时 AI 项目体检" checked><span>2 小时体检<strong>999 元</strong><small>问题清单、风险点、3-5 个下一步动作。</small></span></label>
+          <label class="choice"><input type="radio" name="package" value="1999 元 / 半天深度体检"><span>半天深度体检<strong>1999 元</strong><small>体检报告、优先级路线、AI 工具链建议。</small></span></label>
+          <label class="choice"><input type="radio" name="package" value="5000 元 / 1 天陪跑"><span>1 天陪跑<strong>5000 元</strong><small>执行计划、陪跑记录、小闭环推进建议。</small></span></label>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="name">称呼</label>
+            <input id="name" autocomplete="name" placeholder="例如：王先生 / 某某团队">
+          </div>
+          <div class="field">
+            <label for="contact">回传联系方式</label>
+            <input id="contact" autocomplete="email" placeholder="邮箱或微信，任选一种">
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="source">来源</label>
+            <select id="source">
+              <option>AI Coding 急诊页</option>
+              <option>99 元模板包页面</option>
+              <option>邮件沟通后确认</option>
+              <option>朋友转介绍</option>
+              <option>服务平台</option>
+              <option>其他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="time">希望开始时间</label>
+            <input id="time" placeholder="例如：今天晚些时候 / 明天下午 / 本周内">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="scope">已确认的范围或当前卡点</label>
+          <textarea id="scope" placeholder="例如：Agent/RAG 项目已经有 demo，但检索和工具调用不稳定，希望先做 999 元体检。"></textarea>
+          <div class="hint">不要填写密钥、账号密码、支付账户或隐私原始数据。</div>
+        </div>
+
+        <div class="notice">
+          我会先核对服务是否适合。适合后回发支付材料；付款后请回传付款截图或到账凭证，确认到账后开始安排。
+        </div>
+
+        <div class="error" id="error">请至少填写称呼和回传联系方式。</div>
+
+        <div class="actions">
+          <button type="button" id="build">生成付款申请邮件</button>
+          <a class="button secondary" id="send" href="mailto:957017253@qq.com">用邮箱发送</a>
+          <button class="secondary" type="button" id="copy">复制邮件内容</button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="side">
+      <h2>邮件预览</h2>
+      <pre id="preview">填写左侧信息后生成邮件内容。</pre>
+      <h3>边界</h3>
+      <ul>
+        <li>付款前先确认范围。</li>
+        <li>付款后回传截图。</li>
+        <li>不发送账号密码、密钥或隐私原始数据。</li>
+        <li>不适合体检时会直接说明。</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer>周宇恒｜AI 开发 / 项目体检｜邮箱：957017253@qq.com</footer>
+
+  <script>
+    const form = document.getElementById('reserve-form');
+    const preview = document.getElementById('preview');
+    const send = document.getElementById('send');
+    const error = document.getElementById('error');
+    function selectedPackage() {
+      return form.querySelector('input[name="package"]:checked').value;
+    }
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+    function buildBody() {
+      const body = [
+        '你好，我想申请支付材料并确认启动。',
+        '',
+        '选择项目：' + selectedPackage(),
+        '称呼：' + value('name'),
+        '回传联系方式：' + value('contact'),
+        '来源：' + value('source'),
+        '希望开始时间：' + value('time'),
+        '',
+        '已确认的范围或当前卡点：',
+        value('scope') || '（待补充）',
+        '',
+        '请先确认服务范围是否适合；适合后请回发微信或支付宝支付材料。我付款后会回传付款截图或到账凭证。'
+      ].join('\n');
+      return body;
+    }
+    function refresh(showError) {
+      if (!value('name') || !value('contact')) {
+        if (showError) error.style.display = 'block';
+      } else {
+        error.style.display = 'none';
+      }
+      const body = buildBody();
+      const subject = '申请支付材料 - ' + selectedPackage();
+      preview.textContent = body;
+      send.href = 'mailto:957017253@qq.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      return body;
+    }
+    document.getElementById('build').addEventListener('click', () => refresh(true));
+    document.getElementById('copy').addEventListener('click', async () => {
+      const body = refresh(true);
+      try {
+        await navigator.clipboard.writeText(body);
+      } catch (err) {
+        const area = document.createElement('textarea');
+        area.value = body;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      }
+    });
+    form.addEventListener('input', () => refresh(false));
+    refresh(false);
+  </script>
+</body>
+</html>
