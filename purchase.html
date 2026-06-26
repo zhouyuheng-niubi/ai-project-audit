@@ -90,7 +90,7 @@
     }
     .choices {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 10px;
     }
     .choice {
@@ -196,6 +196,7 @@
         <div class="nav-links">
           <a href="./index.html">服务首页</a>
           <a href="./coding.html">项目急诊</a>
+          <a href="./template.html">模板包</a>
           <a href="./audit.html">项目自测</a>
           <a href="./assets/ai-audit-sample-report.pdf">样例报告</a>
           <a href="./intake.html">提交背景</a>
@@ -216,12 +217,13 @@
       <h2>选择套餐</h2>
       <form id="purchase-form" novalidate>
         <div class="slot" id="intent-panel">
-          <strong>今天最适合先发起：999 元 AI Coding / Agent / RAG 项目急诊</strong>
-          <p>如果项目已经卡住，先把背景、卡点、已有资料类型发来。适合做体检时再付款；不适合会直接说明，不消耗你的时间。</p>
-          <a class="button" href="mailto:957017253@qq.com?subject=%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A&body=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A%E3%80%82%0A%0A%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%EF%BC%9A%0A%E5%BD%93%E5%89%8D%E5%8D%A1%E7%82%B9%EF%BC%9A%0A%E5%B7%B2%E6%9C%89%E8%B5%84%E6%96%99%EF%BC%9A%0A%E5%B8%8C%E6%9C%9B%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%9A%0A%0A%E8%AF%B7%E5%85%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E9%80%82%E5%90%88%E4%BD%93%E6%A3%80%EF%BC%8C%E9%80%82%E5%90%88%E5%90%8E%E5%86%8D%E5%8F%91%E9%80%81%E6%94%AF%E4%BB%98%E6%9D%90%E6%96%99%E3%80%82">直接发起急诊邮件</a>
+          <strong id="intent-title">今天最适合先发起：999 元 AI Coding / Agent / RAG 项目急诊</strong>
+          <p id="intent-copy">如果项目已经卡住，先把背景、卡点、已有资料类型发来。适合做体检时再付款；不适合会直接说明，不消耗你的时间。</p>
+          <a id="quick-mail" class="button" href="mailto:957017253@qq.com?subject=%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A&body=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E7%94%B3%E8%AF%B7%E5%90%AF%E5%8A%A8999%E5%85%83AI%20Coding%E9%A1%B9%E7%9B%AE%E6%80%A5%E8%AF%8A%E3%80%82%0A%0A%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%EF%BC%9A%0A%E5%BD%93%E5%89%8D%E5%8D%A1%E7%82%B9%EF%BC%9A%0A%E5%B7%B2%E6%9C%89%E8%B5%84%E6%96%99%EF%BC%9A%0A%E5%B8%8C%E6%9C%9B%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%9A%0A%0A%E8%AF%B7%E5%85%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E9%80%82%E5%90%88%E4%BD%93%E6%A3%80%EF%BC%8C%E9%80%82%E5%90%88%E5%90%8E%E5%86%8D%E5%8F%91%E9%80%81%E6%94%AF%E4%BB%98%E6%9D%90%E6%96%99%E3%80%82">直接发起急诊邮件</a>
         </div>
 
         <div class="choices">
+          <label class="choice"><input type="radio" name="package" value="99 元 / AI 项目体检自查模板包"><span>自查模板包<strong>99 元</strong><small>资料收集表、报告模板、样例和风险清单。</small></span></label>
           <label class="choice"><input type="radio" name="package" value="999 元 / 2 小时体检" checked><span>2 小时体检<strong>999 元</strong><small>问题清单、风险点、3-5 个下一步动作。</small></span></label>
           <label class="choice"><input type="radio" name="package" value="1999 元 / 半天深度体检"><span>半天深度体检<strong>1999 元</strong><small>体检报告、优先级路线、AI 工具链建议。</small></span></label>
           <label class="choice"><input type="radio" name="package" value="5000 元 / 1 天陪跑"><span>1 天陪跑<strong>5000 元</strong><small>执行计划、陪跑记录、小闭环推进建议。</small></span></label>
@@ -246,6 +248,7 @@
               <option>朋友转介绍</option>
               <option>邮件沟通后确认</option>
               <option>AI Coding 急诊页</option>
+              <option>AI 项目模板包页面</option>
               <option>V2EX / 平台投递</option>
               <option>其他</option>
             </select>
@@ -311,7 +314,7 @@
 
     function buildBody() {
       return [
-        "你好，我确认想启动 AI 项目体检，并请求后续支付材料。",
+        selectedPackage().includes("模板包") ? "你好，我确认想购买 AI 项目体检自查模板包，并请求后续支付材料。" : "你好，我确认想启动 AI 项目体检，并请求后续支付材料。",
         "",
         "选择套餐：" + selectedPackage(),
         "称呼：" + (value("name") || "未填写"),
@@ -334,9 +337,23 @@
     }
 
     function applyIntent() {
-      if (params.get("intent") !== "coding-urgent") return;
-      document.getElementById("source").value = "AI Coding 急诊页";
-      document.getElementById("time").placeholder = "例如：今天晚些时候 / 明天上午 / 本周内";
+      const intent = params.get("intent");
+      if (intent === "template-pack") {
+        form.querySelector("input[value='99 元 / AI 项目体检自查模板包']").checked = true;
+        document.getElementById("source").value = "AI 项目模板包页面";
+        document.getElementById("time").placeholder = "例如：今天 / 明天 / 本周内";
+        document.getElementById("background").placeholder = "简要说明购买用途，例如：准备整理AI项目、给团队评审、给外包沟通、判断是否需要体检。";
+        document.getElementById("materials").placeholder = "可选：你现在已有的资料类型。不要发送账号密码、API Key、支付账户或未授权隐私资料。";
+        document.getElementById("intent-title").textContent = "今天最适合先发起：99 元 AI 项目体检自查模板包";
+        document.getElementById("intent-copy").textContent = "如果暂时不需要一对一诊断，可以先购买模板包，把资料、风险和下一步动作整理清楚。付款后通过邮件发送 zip 文件。";
+        document.getElementById("quick-mail").textContent = "直接发起模板包购买邮件";
+        document.getElementById("quick-mail").href = "mailto:957017253@qq.com?subject=%E7%A1%AE%E8%AE%A4%E8%B4%AD%E4%B9%B0AI%E9%A1%B9%E7%9B%AE%E4%BD%93%E6%A3%80%E8%87%AA%E6%9F%A5%E6%A8%A1%E6%9D%BF%E5%8C%85&body=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E8%B4%AD%E4%B9%B099%E5%85%83AI%E9%A1%B9%E7%9B%AE%E4%BD%93%E6%A3%80%E8%87%AA%E6%9F%A5%E6%A8%A1%E6%9D%BF%E5%8C%85%E3%80%82%0A%0A%E7%A7%B0%E5%91%BC%EF%BC%9A%0A%E8%81%94%E7%B3%BB%E6%96%B9%E5%BC%8F%EF%BC%9A%0A%E8%B4%AD%E4%B9%B0%E7%94%A8%E9%80%94%EF%BC%9A%0A%0A%E8%AF%B7%E7%A1%AE%E8%AE%A4%E5%90%8E%E5%8F%91%E9%80%81%E6%94%AF%E4%BB%98%E6%9D%90%E6%96%99%E3%80%82";
+        return;
+      }
+      if (intent === "coding-urgent") {
+        document.getElementById("source").value = "AI Coding 急诊页";
+        document.getElementById("time").placeholder = "例如：今天晚些时候 / 明天上午 / 本周内";
+      }
     }
 
     form.addEventListener("input", updatePreview);
@@ -346,7 +363,7 @@
       const required = value("contact") && value("background");
       errorBox.style.display = required ? "none" : "block";
       if (!required) return;
-      const subject = encodeURIComponent("确认购买 AI 项目体检 - " + selectedPackage());
+      const subject = encodeURIComponent((selectedPackage().includes("模板包") ? "确认购买 AI 项目体检自查模板包 - " : "确认购买 AI 项目体检 - ") + selectedPackage());
       const body = encodeURIComponent(buildBody());
       window.location.href = "mailto:957017253@qq.com?subject=" + subject + "&body=" + body;
     });

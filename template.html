@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Coding 项目急诊 - 周宇恒</title>
-  <meta name="description" content="AI Coding 项目急诊：适合 Agent、RAG、AI 编程、前后端项目卡住时，先用 999 元 2 小时体检输出问题清单、风险点和下一步动作。">
+  <title>AI 项目体检自查模板包 - 周宇恒</title>
+  <meta name="description" content="99 元 AI 项目体检自查模板包：包含资料收集表、体检报告模板、脱敏样例、风险自查清单和使用说明，适合 AI 项目启动体检前先整理风险。">
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -17,7 +17,6 @@
       --green: #17604a;
       --green-soft: #e6f3ee;
       --blue: #2458a6;
-      --amber: #8d5a00;
       --amber-soft: #fff4d7;
     }
     * { box-sizing: border-box; }
@@ -44,22 +43,22 @@
     }
     .brand { font-weight: 850; letter-spacing: 0; }
     .nav-links { display: flex; flex-wrap: wrap; gap: 14px; font-size: 14px; color: #d9e5f3; }
-    .nav-links a { color: inherit; text-decoration: none; }
+    .nav-links a { text-decoration: none; }
     .hero {
       position: relative;
-      min-height: min(620px, 74svh);
+      min-height: min(560px, 70svh);
       display: grid;
       align-items: center;
       color: #fff;
       background:
-        linear-gradient(90deg, rgba(13, 26, 45, .96), rgba(13, 26, 45, .78), rgba(13, 26, 45, .36)),
+        linear-gradient(90deg, rgba(13, 26, 45, .96), rgba(13, 26, 45, .8), rgba(13, 26, 45, .4)),
         url("./assets/audit-dashboard.png") center / cover no-repeat;
       border-bottom: 1px solid rgba(255,255,255,.14);
     }
     h1, h2, h3 { margin: 0; letter-spacing: 0; }
     h1 {
       max-width: 820px;
-      font-size: clamp(34px, 5vw, 58px);
+      font-size: clamp(34px, 5vw, 56px);
       line-height: 1.08;
     }
     h2 { font-size: 25px; margin-bottom: 14px; }
@@ -123,7 +122,13 @@
       margin-bottom: 10px;
     }
     .tag.blue { background: #e9f0fb; color: var(--blue); }
-    .price { display: block; margin: 8px 0; color: var(--green); font-size: 30px; font-weight: 900; }
+    .price {
+      display: block;
+      margin: 8px 0;
+      color: var(--green);
+      font-size: 32px;
+      font-weight: 900;
+    }
     ul { margin: 0; padding-left: 20px; }
     li { margin: 6px 0; }
     .notice {
@@ -136,7 +141,7 @@
     footer { padding: 18px 0 34px; color: var(--muted); text-align: center; font-size: 14px; }
     @media (max-width: 900px) {
       nav { align-items: flex-start; flex-direction: column; }
-      .hero { min-height: 68svh; background-position: center; }
+      .hero { min-height: 66svh; background-position: center; }
       .metrics, .grid-3, .grid-2 { grid-template-columns: 1fr; }
     }
   </style>
@@ -148,11 +153,10 @@
         <div class="brand">周宇恒｜AI 项目体检</div>
         <div class="nav-links">
           <a href="./index.html">服务首页</a>
-          <a href="./template.html">模板包</a>
+          <a href="./coding.html">项目急诊</a>
           <a href="./audit.html">项目自测</a>
           <a href="./assets/ai-audit-sample-report.pdf">样例报告</a>
           <a href="./purchase.html">确认启动</a>
-          <a href="./intake.html">提交背景</a>
         </div>
       </nav>
     </div>
@@ -160,85 +164,94 @@
 
   <section class="hero">
     <div class="wrap">
-      <div class="kicker">AI Coding / Agent / RAG / 前后端交付急诊</div>
-      <h1>AI 写代码越写越乱时，先用 2 小时把风险看清。</h1>
-      <p class="lead">适合 Agent 原型、RAG 检索、AI Coding 生成代码、前后端外包项目卡住的团队。先做 999 元体检，输出问题清单、风险点和 3-5 个下一步动作。</p>
+      <div class="kicker">低门槛自查材料 / 付费后邮件交付</div>
+      <h1>99 元 AI 项目体检自查模板包。</h1>
+      <p class="lead">适合还没准备做 999 元体检，但想先把 Agent、RAG、AI Coding 或 AI 应用项目的资料、风险和下一步动作整理清楚的小团队。</p>
       <div class="actions">
-        <a class="button" href="./purchase.html?intent=coding-urgent">确认启动 999 元体检</a>
-        <a class="button light" href="./intake.html">先提交项目背景</a>
+        <a class="button" href="./purchase.html?intent=template-pack">确认购买模板包</a>
+        <a class="button light" href="./audit.html">先做项目自测</a>
         <a class="button light" href="./assets/ai-audit-sample-report.pdf">查看样例报告</a>
       </div>
     </div>
   </section>
 
   <main class="wrap">
-    <section class="metrics" aria-label="服务指标">
-      <div class="metric"><span>入口服务</span><strong>999 元</strong></div>
-      <div class="metric"><span>沟通方式</span><strong>先文字</strong></div>
-      <div class="metric"><span>交付形态</span><strong>报告/清单</strong></div>
+    <section class="metrics" aria-label="模板包指标">
+      <div class="metric"><span>价格</span><strong>99 元</strong></div>
+      <div class="metric"><span>交付方式</span><strong>邮件发送</strong></div>
+      <div class="metric"><span>适用阶段</span><strong>自查/准备</strong></div>
     </section>
 
     <section class="panel">
-      <h2>典型卡点</h2>
+      <h2>模板包包含什么</h2>
       <div class="grid-3">
-        <div class="card"><span class="tag">AI Coding</span><h3>代码能跑，但边界失控</h3><p>AI 生成代码越来越多，重复逻辑、状态流、权限和异常路径没人重新收口。</p></div>
-        <div class="card"><span class="tag">Agent / RAG</span><h3>原型像 Demo，落地像重做</h3><p>Prompt、工具调用、检索、评估和业务流程没有验收边界，继续开发风险很高。</p></div>
-        <div class="card"><span class="tag">外包交付</span><h3>需求、代码、验收互相打架</h3><p>客户、开发、测试和上线标准不一致，需要第三方视角先拆清优先级。</p></div>
+        <div class="card"><span class="tag">资料收集</span><h3>AI 项目资料收集表</h3><p>把项目背景、卡点、已有资料、AI 能力范围和授权边界整理到一页里。</p></div>
+        <div class="card"><span class="tag">报告模板</span><h3>体检报告模板</h3><p>用于梳理一句话结论、关键问题、AI 工具链判断、数据权限和下一步动作。</p></div>
+        <div class="card"><span class="tag">脱敏样例</span><h3>报告样例</h3><p>展示一份脱敏体检报告应该如何写问题、影响、优先级和建议动作。</p></div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>999 元 2 小时体检交付</h2>
+      <h2>另外包含</h2>
       <div class="grid-2">
         <div class="card">
-          <span class="price">999 元</span>
+          <span class="tag blue">风险自查</span>
+          <h3>AI 项目风险自查清单</h3>
           <ul>
-            <li>问题清单：当前最影响交付的 5-10 个问题。</li>
-            <li>风险点：账号、数据、代码、需求、上线和验收风险。</li>
-            <li>下一步动作：3-5 个可执行优先级建议。</li>
+            <li>需求边界</li>
+            <li>交付验收</li>
+            <li>AI Coding 与代码质量</li>
+            <li>Agent / RAG 链路</li>
+            <li>数据与安全</li>
           </ul>
         </div>
         <div class="card">
-          <h3>不包含</h3>
+          <span class="tag blue">使用说明</span>
+          <h3>按场景整理给不同对象看</h3>
           <ul>
-            <li>不承诺完整系统开发。</li>
-            <li>不登录未授权账号。</li>
-            <li>不索要密钥、支付账户或隐私数据。</li>
-            <li>不免费输出完整方案。</li>
+            <li>给老板看结论和下一步动作</li>
+            <li>给开发看验收和回归清单</li>
+            <li>给外包看边界和不建议事项</li>
+            <li>给自己判断是否需要继续投入</li>
           </ul>
         </div>
       </div>
-      <div class="actions">
-        <a class="button secondary" href="./assets/ai-audit-sample-report.pdf">查看脱敏样例报告</a>
-        <a class="button secondary" href="./purchase.html?intent=coding-urgent">确认启动</a>
+    </section>
+
+    <section class="panel">
+      <h2>适合与不适合</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>适合</h3>
+          <ul>
+            <li>AI 项目还在整理阶段，想先自查。</li>
+            <li>准备找开发、外包或内部评审前，需要一套结构化材料。</li>
+            <li>还不确定是否需要 999 元一对一体检。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>不适合</h3>
+          <ul>
+            <li>需要我直接判断你的真实项目风险。</li>
+            <li>需要登录系统、看代码或分析日志。</li>
+            <li>想要完整方案、开发交付或上线承诺。</li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>你只需要先提供这些</h2>
-      <div class="grid-3">
-        <div class="card"><span class="tag blue">背景</span><h3>项目做什么</h3><p>目标用户、现有阶段、已经投入到哪一步。</p></div>
-        <div class="card"><span class="tag blue">卡点</span><h3>现在卡在哪里</h3><p>需求、代码、Prompt、检索、接口、页面、部署或验收问题。</p></div>
-        <div class="card"><span class="tag blue">资料</span><h3>已授权材料</h3><p>可公开截图、文档、脱敏代码片段或错误描述。</p></div>
-      </div>
+      <h2>购买流程</h2>
+      <p>确认购买后，先通过邮件说明购买模板包。双方确认后再发送支付材料；付款后通过邮件发送模板包 zip 文件。</p>
       <div class="actions">
-        <a class="button secondary" href="./intake.html">填写项目背景</a>
-        <a class="button secondary" href="./audit.html">先做项目自测</a>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2>推荐路径</h2>
-      <p>如果你已经确认要启动，直接走确认启动页；如果还不确定，把项目背景发来，先判断是否适合 999 元体检。不适合会直接说明。</p>
-      <div class="actions">
-        <a class="button" href="./purchase.html?intent=coding-urgent">确认启动 999 元体检</a>
-        <a class="button secondary" href="mailto:957017253@qq.com?subject=咨询AI Coding项目急诊&body=你好，我想咨询AI Coding项目急诊。项目背景：%0A当前卡点：%0A已有资料：%0A希望得到的判断：">邮件咨询</a>
+        <a class="button" href="./purchase.html?intent=template-pack">确认购买 99 元模板包</a>
+        <a class="button secondary" href="mailto:957017253@qq.com?subject=确认购买AI项目体检自查模板包&body=你好，我想购买99元AI项目体检自查模板包。%0A%0A称呼：%0A联系方式：%0A购买用途：%0A%0A请确认后发送支付材料。">邮件确认购买</a>
       </div>
     </section>
 
     <section class="panel">
       <h2>边界</h2>
-      <p class="notice">只做合法、已授权、边界清楚的项目诊断。不接违法项目，不承诺商业收益，不把 999 元体检包装成完整系统交付。</p>
+      <p class="notice">模板包不包含一对一诊断。不要在模板里填写账号密码、API Key、支付账户、客户隐私或未授权资料。如需要我判断真实项目，再单独确认 999 元 / 2 小时体检。</p>
     </section>
   </main>
 
