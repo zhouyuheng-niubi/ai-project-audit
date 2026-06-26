@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>确认启动 - AI 项目体检</title>
+  <meta name="description" content="确认 AI 项目体检套餐、项目背景和时间偏好，生成启动确认邮件。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --ink: #172033;
+      --muted: #566273;
+      --surface: #ffffff;
+      --line: #d8e0ea;
+      --green: #17604a;
+      --green-soft: #e6f3ee;
+      --blue: #2458a6;
+      --amber: #8d5a00;
+      --amber-soft: #fff4d7;
+      --red: #a43820;
+      --red-soft: #fff0ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #132238;
+      color: #fff;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { font-weight: 850; }
+    .nav-links { display: flex; gap: 14px; font-size: 14px; color: #d9e5f3; }
+    .nav-links a { color: inherit; text-decoration: none; }
+    .hero {
+      background: #132238;
+      color: #fff;
+      padding: 36px 0;
+    }
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    h1 {
+      max-width: 820px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.08;
+    }
+    h2 { font-size: 25px; margin-bottom: 14px; }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    p { margin: 0 0 10px; }
+    .lead {
+      max-width: 760px;
+      margin-top: 16px;
+      color: #d9e5f3;
+      font-size: 18px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      padding: 22px 0 42px;
+    }
+    .panel, .side, .choice {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .panel { padding: 18px; }
+    .side { padding: 16px; align-self: start; position: sticky; top: 16px; }
+    form { display: grid; gap: 16px; }
+    .field { display: grid; gap: 6px; }
+    label { font-weight: 850; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 8px;
+      min-height: 120px;
+      padding: 12px;
+      cursor: pointer;
+    }
+    .choice input { width: 18px; height: 18px; margin: 3px 0 0; }
+    .choice strong { display: block; color: var(--green); font-size: 22px; margin: 4px 0; }
+    .choice small { display: block; color: var(--muted); }
+    input, select, textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      padding: 9px 10px;
+    }
+    textarea { min-height: 104px; resize: vertical; }
+    .notice {
+      padding: 12px;
+      background: var(--amber-soft);
+      border: 1px solid #ecd391;
+      color: #603b00;
+      border-radius: 8px;
+    }
+    .error {
+      display: none;
+      padding: 12px;
+      background: var(--red-soft);
+      border: 1px solid #efb5a9;
+      color: var(--red);
+      border-radius: 8px;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    button, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    button.secondary, .button.secondary {
+      background: #fff;
+      color: var(--green);
+    }
+    pre {
+      white-space: pre-wrap;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #273449;
+      font-size: 14px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    footer {
+      padding: 18px 0 34px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+    @media (max-width: 900px) {
+      main, .grid, .choices { grid-template-columns: 1fr; }
+      .side { position: static; }
+      nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { flex-wrap: wrap; }
+      .hero { padding: 30px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav aria-label="页面导航">
+        <div class="brand">周宇恒｜AI 项目体检</div>
+        <div class="nav-links">
+          <a href="./index.html">服务首页</a>
+          <a href="./coding.html">项目急诊</a>
+          <a href="./audit.html">项目自测</a>
+          <a href="./assets/ai-audit-sample-report.pdf">样例报告</a>
+          <a href="./intake.html">提交背景</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>确认要启动体检后，再发送启动邮件。</h1>
+      <p class="lead">这里不会展示支付二维码，也不会提交数据到服务器。填写后会在你的邮件客户端生成确认邮件，由你亲自发送。</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel">
+      <h2>选择套餐</h2>
+      <form id="purchase-form" novalidate>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="package" value="999 元 / 2 小时体检" checked><span>2 小时体检<strong>999 元</strong><small>问题清单、风险点、3-5 个下一步动作。</small></span></label>
+          <label class="choice"><input type="radio" name="package" value="1999 元 / 半天深度体检"><span>半天深度体检<strong>1999 元</strong><small>体检报告、优先级路线、AI 工具链建议。</small></span></label>
+          <label class="choice"><input type="radio" name="package" value="5000 元 / 1 天陪跑"><span>1 天陪跑<strong>5000 元</strong><small>执行计划、陪跑记录、小闭环推进建议。</small></span></label>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="name">称呼</label>
+            <input id="name" autocomplete="name" placeholder="例如：王先生 / 某某团队">
+          </div>
+          <div class="field">
+            <label for="contact">联系方式</label>
+            <input id="contact" autocomplete="email" placeholder="邮箱或微信，任选一种">
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="source">你从哪里看到</label>
+            <select id="source">
+              <option>公开页面</option>
+              <option>朋友转介绍</option>
+              <option>邮件沟通后确认</option>
+              <option>V2EX / 平台投递</option>
+              <option>其他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="time">希望开始时间</label>
+            <input id="time" placeholder="例如：今天晚些时候 / 明天下午 / 本周内">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="background">项目背景与当前卡点</label>
+          <textarea id="background" placeholder="简要说明项目做什么、当前卡在哪里、希望这次体检判断什么。"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="materials">可提供的资料</label>
+          <textarea id="materials" placeholder="例如：截图、需求文档、接口说明、脱敏代码片段。不要发送账号密码、API Key、支付账户或未授权隐私资料。"></textarea>
+        </div>
+
+        <p class="notice">支付材料只在双方确认服务范围后发送。首发确认邮件里不要放账号密码、密钥、支付账户或未授权资料。</p>
+        <p id="error" class="error">请至少填写“联系方式、项目背景与当前卡点”。</p>
+
+        <div class="actions">
+          <button type="submit">生成确认购买邮件</button>
+          <button type="button" class="secondary" id="copy-btn">复制确认内容</button>
+          <a class="button secondary" href="./assets/ai-audit-sample-report.pdf">查看样例报告</a>
+        </div>
+      </form>
+    </section>
+
+    <aside class="side">
+      <h2>确认邮件预览</h2>
+      <p class="hint">确认无误后发送给 957017253@qq.com。</p>
+      <pre id="preview"></pre>
+      <h3 style="margin-top:16px;">下一步</h3>
+      <ul>
+        <li>我会先确认项目是否适合该套餐。</li>
+        <li>确认适合后再发送支付材料。</li>
+        <li>付款后按约定时间开始体检。</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer>
+    周宇恒｜AI 开发 / 项目体检｜957017253@qq.com
+  </footer>
+
+  <script>
+    const form = document.getElementById("purchase-form");
+    const preview = document.getElementById("preview");
+    const errorBox = document.getElementById("error");
+    const copyBtn = document.getElementById("copy-btn");
+
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function selectedPackage() {
+      return form.querySelector("input[name='package']:checked").value;
+    }
+
+    function buildBody() {
+      return [
+        "你好，我确认想启动 AI 项目体检，并请求后续支付材料。",
+        "",
+        "选择套餐：" + selectedPackage(),
+        "称呼：" + (value("name") || "未填写"),
+        "联系方式：" + (value("contact") || "未填写"),
+        "来源：" + value("source"),
+        "希望开始时间：" + (value("time") || "未填写"),
+        "",
+        "项目背景与当前卡点：",
+        value("background") || "未填写",
+        "",
+        "可提供的资料：",
+        value("materials") || "未填写",
+        "",
+        "说明：我不会在邮件里发送账号密码、API Key、支付账户或未授权隐私资料。请先确认该套餐是否适合，适合后再发送支付材料。"
+      ].join("\n");
+    }
+
+    function updatePreview() {
+      preview.textContent = buildBody();
+    }
+
+    form.addEventListener("input", updatePreview);
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const required = value("contact") && value("background");
+      errorBox.style.display = required ? "none" : "block";
+      if (!required) return;
+      const subject = encodeURIComponent("确认购买 AI 项目体检 - " + selectedPackage());
+      const body = encodeURIComponent(buildBody());
+      window.location.href = "mailto:957017253@qq.com?subject=" + subject + "&body=" + body;
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      updatePreview();
+      try {
+        await navigator.clipboard.writeText(buildBody());
+        const old = copyBtn.textContent;
+        copyBtn.textContent = "已复制";
+        setTimeout(() => { copyBtn.textContent = old; }, 1200);
+      } catch (error) {
+        copyBtn.textContent = "请手动复制";
+      }
+    });
+
+    updatePreview();
+  </script>
+</body>
+</html>

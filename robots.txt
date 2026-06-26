@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zhouyuheng-niubi.github.io/ai-project-audit/sitemap.xml

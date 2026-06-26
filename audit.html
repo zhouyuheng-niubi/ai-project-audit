@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 项目自测 - AI 项目体检</title>
+  <meta name="description" content="AI 项目体检自测工具：根据项目阶段、卡点、AI 使用状态和交付压力生成体检建议。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --ink: #172033;
+      --muted: #566273;
+      --surface: #ffffff;
+      --line: #d8e0ea;
+      --green: #17604a;
+      --green-soft: #e6f3ee;
+      --blue: #2458a6;
+      --blue-soft: #e9f0fb;
+      --amber: #8d5a00;
+      --amber-soft: #fff4d7;
+      --red: #a43820;
+      --red-soft: #fff0ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #132238;
+      color: #fff;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { font-weight: 850; }
+    .nav-links { display: flex; gap: 14px; font-size: 14px; color: #d9e5f3; }
+    .nav-links a { color: inherit; text-decoration: none; }
+    .hero {
+      background: #132238;
+      color: #fff;
+      padding: 36px 0;
+    }
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    h1 {
+      max-width: 820px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.08;
+    }
+    h2 { font-size: 25px; margin-bottom: 14px; }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    p { margin: 0 0 10px; }
+    .lead {
+      max-width: 760px;
+      margin-top: 16px;
+      color: #d9e5f3;
+      font-size: 18px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      padding: 22px 0 42px;
+    }
+    .panel, .side, .choice, .score-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .panel { padding: 18px; }
+    .side { padding: 16px; align-self: start; position: sticky; top: 16px; }
+    form { display: grid; gap: 16px; }
+    .group { display: grid; gap: 8px; }
+    .question { font-weight: 850; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 8px;
+      min-height: 76px;
+      padding: 11px;
+      cursor: pointer;
+    }
+    .choice input { width: 18px; height: 18px; margin: 3px 0 0; }
+    .choice span { display: block; font-weight: 820; }
+    .choice small { display: block; margin-top: 2px; color: var(--muted); }
+    .slider-row {
+      display: grid;
+      grid-template-columns: 1fr 52px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--green); }
+    output {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      border-radius: 6px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 900;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    button, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    button.secondary, .button.secondary {
+      background: #fff;
+      color: var(--green);
+    }
+    .score-card {
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .score {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .score strong { font-size: 42px; line-height: 1; }
+    .badge {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .badge.warn { background: var(--amber-soft); color: var(--amber); }
+    .badge.red { background: var(--red-soft); color: var(--red); }
+    pre {
+      white-space: pre-wrap;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #273449;
+      font-size: 14px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    footer {
+      padding: 18px 0 34px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+    @media (max-width: 900px) {
+      main, .choices { grid-template-columns: 1fr; }
+      .side { position: static; }
+      nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { flex-wrap: wrap; }
+      .hero { padding: 30px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav aria-label="页面导航">
+        <div class="brand">周宇恒｜AI 项目体检</div>
+        <div class="nav-links">
+          <a href="./index.html">服务首页</a>
+          <a href="./coding.html">项目急诊</a>
+          <a href="./cases.html">项目背书</a>
+          <a href="./assets/ai-audit-sample-report.pdf">样例报告</a>
+          <a href="./purchase.html">确认启动</a>
+          <a href="./intake.html">提交背景</a>
+          <a href="#contact">联系</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>用 2 分钟判断：你的 AI 项目现在该不该先体检。</h1>
+      <p class="lead">结果在本机生成，不会上传。分数越高，越说明项目继续投入前需要先看清需求、代码、数据和交付风险。</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="panel">
+      <h2>自测问题</h2>
+      <form id="audit-form">
+        <div class="group">
+          <p class="question">项目现在处于哪个阶段？</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="stage" value="8" checked><span>只有想法</span><small>还没开始开发，主要需要判断范围。</small></label>
+            <label class="choice"><input type="radio" name="stage" value="18"><span>已有 Demo</span><small>能演示，但下一步边界不清。</small></label>
+            <label class="choice"><input type="radio" name="stage" value="26"><span>已有代码但卡住</span><small>代码、需求或 AI 工具链已经变复杂。</small></label>
+            <label class="choice"><input type="radio" name="stage" value="32"><span>交付/验收前</span><small>返工、验收、上线风险已经出现。</small></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="question">最主要的卡点是什么？</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="blocker" value="10" checked><span>需求拆不清</span><small>不知道先做哪一段。</small></label>
+            <label class="choice"><input type="radio" name="blocker" value="18"><span>AI 接入混乱</span><small>模型、Agent、RAG、工具调用边界不清。</small></label>
+            <label class="choice"><input type="radio" name="blocker" value="22"><span>代码/流程失控</span><small>AI 写得快，但质量和风险看不清。</small></label>
+            <label class="choice"><input type="radio" name="blocker" value="26"><span>外包反复返工</span><small>验收口径、责任边界或交付物不稳定。</small></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="question">AI 编程或自动化使用状态</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="aiState" value="6" checked><span>尚未使用</span><small>只是准备接入。</small></label>
+            <label class="choice"><input type="radio" name="aiState" value="14"><span>零散使用</span><small>能提速，但没有流程。</small></label>
+            <label class="choice"><input type="radio" name="aiState" value="22"><span>大量使用</span><small>产出多，审查和回归跟不上。</small></label>
+            <label class="choice"><input type="radio" name="aiState" value="28"><span>已经影响交付</span><small>上下文、代码、需求或数据出现明显混乱。</small></label>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="question">交付压力</p>
+          <p class="hint">1 表示不急，10 表示已经临近验收、交付或预算节点。</p>
+          <div class="slider-row">
+            <input id="pressure" type="range" min="1" max="10" value="5">
+            <output id="pressure-value">5</output>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="question">已有资料完整度</p>
+          <p class="hint">1 表示只有口头描述，10 表示已有文档、截图、代码片段、流程或接口材料。</p>
+          <div class="slider-row">
+            <input id="materials" type="range" min="1" max="10" value="4">
+            <output id="materials-value">4</output>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="copy-result">复制结果</button>
+          <button type="button" class="secondary" id="mail-result">带结果发邮件</button>
+          <a class="button secondary" href="./intake.html">填写项目背景</a>
+          <a class="button secondary" href="./purchase.html">确认启动</a>
+          <a class="button secondary" href="./assets/ai-audit-sample-report.pdf">查看样例报告</a>
+        </div>
+      </form>
+    </section>
+
+    <aside class="side" id="contact">
+      <h2>自测结果</h2>
+      <div class="score-card">
+        <div class="score"><strong id="score">0</strong><span>/ 100</span></div>
+        <span class="badge" id="level">正在计算</span>
+        <p id="recommendation" style="margin-top:10px;"></p>
+      </div>
+      <h3>建议动作</h3>
+      <ul id="actions-list"></ul>
+      <h3 style="margin-top:16px;">邮件内容</h3>
+      <pre id="result-text"></pre>
+    </aside>
+  </main>
+
+  <footer>
+    周宇恒｜AI 开发 / 项目体检｜957017253@qq.com
+  </footer>
+
+  <script>
+    const form = document.getElementById("audit-form");
+    const pressure = document.getElementById("pressure");
+    const materials = document.getElementById("materials");
+    const pressureValue = document.getElementById("pressure-value");
+    const materialsValue = document.getElementById("materials-value");
+    const scoreEl = document.getElementById("score");
+    const levelEl = document.getElementById("level");
+    const recommendationEl = document.getElementById("recommendation");
+    const actionsList = document.getElementById("actions-list");
+    const resultText = document.getElementById("result-text");
+    const copyResult = document.getElementById("copy-result");
+    const mailResult = document.getElementById("mail-result");
+
+    function selected(name) {
+      return Number(form.querySelector("input[name='" + name + "']:checked").value);
+    }
+
+    function selectedLabel(name) {
+      const input = form.querySelector("input[name='" + name + "']:checked");
+      return input.closest("label").querySelector("span").textContent;
+    }
+
+    function calculate() {
+      pressureValue.textContent = pressure.value;
+      materialsValue.textContent = materials.value;
+      const materialRisk = 12 - Number(materials.value);
+      const raw = selected("stage") + selected("blocker") + selected("aiState") + Number(pressure.value) * 2 + materialRisk;
+      const score = Math.min(100, Math.max(0, raw));
+
+      let level = "可先文字判断";
+      let badgeClass = "badge";
+      let recommendation = "建议先整理项目背景，不急着付费体检。";
+      let actions = [
+        "补齐项目目标、当前卡点和已有材料。",
+        "如果准备继续投入开发，再发背景做一次免费方向判断。",
+        "暂时不要直接启动大范围外包或重构。"
+      ];
+      let packageName = "先判断是否适合";
+
+      if (score >= 70) {
+        level = "建议先做体检";
+        badgeClass = "badge red";
+        recommendation = "项目继续投入前，建议先做 999 元 2 小时体检，必要时升级半天深度体检。";
+        actions = [
+          "先把需求、代码/资料、交付压力和验收边界整理出来。",
+          "用 999 元 2 小时体检输出问题清单、风险点和 3-5 个下一步动作。",
+          "不要先承诺大范围开发，先用小闭环验证。"
+        ];
+        packageName = "999 元 / 2 小时体检";
+      } else if (score >= 48) {
+        level = "适合做轻量诊断";
+        badgeClass = "badge warn";
+        recommendation = "可以先做 999 元体检或半小时文字预判断，看是否值得继续投入。";
+        actions = [
+          "补充项目背景、当前卡点和已有资料。",
+          "先判断是否适合 999 元体检。",
+          "如果卡点涉及交付/验收，再升级半天深度体检。"
+        ];
+        packageName = "先判断，可能适合 999 元体检";
+      }
+
+      scoreEl.textContent = score;
+      levelEl.textContent = level;
+      levelEl.className = badgeClass;
+      recommendationEl.textContent = recommendation;
+      actionsList.innerHTML = actions.map((item) => "<li>" + item + "</li>").join("");
+
+      resultText.textContent = [
+        "你好，我做了 AI 项目体检自测，想请你判断是否适合继续沟通。",
+        "",
+        "自测分数：" + score + "/100",
+        "自测结论：" + level,
+        "建议套餐：" + packageName,
+        "",
+        "项目阶段：" + selectedLabel("stage"),
+        "主要卡点：" + selectedLabel("blocker"),
+        "AI 使用状态：" + selectedLabel("aiState"),
+        "交付压力：" + pressure.value + "/10",
+        "已有资料完整度：" + materials.value + "/10",
+        "",
+        "我会补充项目背景、当前卡点、已有资料和希望得到的判断。"
+      ].join("\n");
+    }
+
+    form.addEventListener("input", calculate);
+    copyResult.addEventListener("click", async () => {
+      calculate();
+      try {
+        await navigator.clipboard.writeText(resultText.textContent);
+        const old = copyResult.textContent;
+        copyResult.textContent = "已复制";
+        setTimeout(() => { copyResult.textContent = old; }, 1200);
+      } catch (error) {
+        copyResult.textContent = "请手动复制";
+      }
+    });
+    mailResult.addEventListener("click", () => {
+      calculate();
+      const subject = encodeURIComponent("AI 项目体检自测结果");
+      const body = encodeURIComponent(resultText.textContent);
+      window.location.href = "mailto:957017253@qq.com?subject=" + subject + "&body=" + body;
+    });
+
+    calculate();
+  </script>
+</body>
+</html>

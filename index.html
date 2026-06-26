@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 项目体检 - 周宇恒</title>
+  <meta name="description" content="AI 项目体检服务：面向项目卡住、AI 编程混乱、交付流程不清的小团队，输出问题清单、风险点和下一步动作。">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --ink: #172033;
+      --muted: #566273;
+      --surface: #ffffff;
+      --line: #d8e0ea;
+      --green: #17604a;
+      --green-soft: #e6f3ee;
+      --blue: #2458a6;
+      --amber: #8d5a00;
+      --amber-soft: #fff4d7;
+      --red: #a43820;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #132238;
+      color: #fff;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { font-weight: 850; letter-spacing: 0; }
+    .nav-links { display: flex; gap: 14px; font-size: 14px; color: #d9e5f3; }
+    .nav-links a { text-decoration: none; }
+    .hero {
+      background: #132238;
+      color: #fff;
+      padding: 38px 0 30px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(320px, 1fr);
+      gap: 34px;
+      align-items: center;
+    }
+    .kicker {
+      color: #93d1bd;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    h1 {
+      max-width: 740px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.08;
+    }
+    h2 { font-size: 25px; margin-bottom: 14px; }
+    h3 { font-size: 18px; margin-bottom: 8px; }
+    p { margin: 0 0 10px; }
+    .lead {
+      max-width: 720px;
+      margin-top: 16px;
+      color: #d9e5f3;
+      font-size: 18px;
+    }
+    .hero-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: #0f172a;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.secondary {
+      background: #fff;
+      color: var(--green);
+    }
+    .button.light {
+      background: transparent;
+      color: #fff;
+      border-color: rgba(255,255,255,.54);
+    }
+    main { padding: 22px 0 42px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .metric, .panel, .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .metric { padding: 14px; min-height: 92px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--green);
+      font-size: 26px;
+    }
+    .panel { padding: 18px; margin-bottom: 18px; }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card { padding: 15px; }
+    .price {
+      display: block;
+      margin: 8px 0;
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 10px;
+    }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      min-height: 128px;
+    }
+    .step b {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+    .notice {
+      background: var(--amber-soft);
+      border: 1px solid #ecd391;
+      border-radius: 8px;
+      padding: 13px;
+      color: #603b00;
+    }
+    .contact {
+      background: #132238;
+      color: #fff;
+      border-color: #132238;
+    }
+    .contact p { color: #d9e5f3; }
+    .muted { color: var(--muted); }
+    footer {
+      padding: 18px 0 34px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+    @media (max-width: 900px) {
+      .hero-grid, .metrics, .grid-3, .grid-2, .steps { grid-template-columns: 1fr; }
+      .hero { padding-top: 28px; }
+      .nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">周宇恒｜AI 项目体检</div>
+      <nav class="nav-links" aria-label="页面导航">
+        <a href="#price">套餐</a>
+        <a href="./coding.html">项目急诊</a>
+        <a href="./cases.html">项目背书</a>
+        <a href="./audit.html">项目自测</a>
+        <a href="./assets/ai-audit-sample-report.pdf">样例报告</a>
+        <a href="./purchase.html">确认启动</a>
+        <a href="./intake.html">提交背景</a>
+        <a href="#process">流程</a>
+        <a href="#boundary">边界</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker">AI 开发 / 项目诊断 / 交付提效</div>
+        <h1>项目卡住时，先用 2 小时看清问题和下一步。</h1>
+        <p class="lead">面向小团队、外包项目、AI 编程项目和流程数字化需求，先做轻量体检，不直接承诺大系统。交付问题清单、风险点和 3-5 个可执行动作。</p>
+        <div class="actions">
+          <a class="button" href="mailto:957017253@qq.com?subject=咨询AI项目体检&body=你好，我想咨询AI项目体检。项目背景：%0A当前卡点：%0A希望得到的判断：">邮件咨询</a>
+          <a class="button light" href="./coding.html">AI Coding 急诊</a>
+          <a class="button light" href="./audit.html">先做项目自测</a>
+          <a class="button light" href="./intake.html">提交项目背景</a>
+          <a class="button light" href="./purchase.html">确认启动</a>
+          <a class="button light" href="./assets/ai-audit-sample-report.pdf">查看样例报告</a>
+          <a class="button light" href="./assets/ai-audit-onepager.pdf">下载一页纸</a>
+          <a class="button light" href="./cases.html">查看项目背书</a>
+        </div>
+      </div>
+      <img class="hero-image" src="./assets/audit-dashboard.png" alt="AI 项目体检看板示意图">
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="metrics" aria-label="服务指标">
+      <div class="metric"><span>低门槛入口</span><strong>999 元</strong></div>
+      <div class="metric"><span>深度体检</span><strong>1999 元</strong></div>
+      <div class="metric"><span>一天陪跑</span><strong>5000 元</strong></div>
+    </section>
+
+    <section class="panel">
+      <h2>适合的情况</h2>
+      <div class="grid-3">
+        <div class="card"><span class="tag">项目卡住</span><h3>需求和交付拆不动</h3><p>已经有想法、原型或代码，但不知道下一步先修什么、先做什么。</p></div>
+        <div class="card"><span class="tag">AI 编程混乱</span><h3>越写越多，风险看不清</h3><p>用了 AI 工具但产出散、重复多、上下文乱，需要重新梳理边界和优先级。</p></div>
+        <div class="card"><span class="tag">流程低效</span><h3>业务仍靠表格和群消息</h3><p>想判断哪些流程值得数字化，哪些不该先做，避免一开始就重投入。</p></div>
+      </div>
+      <div class="actions">
+        <a class="button secondary" href="./coding.html">查看 AI Coding / Agent 项目急诊入口</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>不确定是否适合？先做自测</h2>
+      <p>根据项目阶段、卡点、AI 使用状态、交付压力和已有资料完整度，生成一个本机自测结果。结果不会上传，可以直接带着结果发邮件咨询。</p>
+      <div class="actions">
+        <a class="button secondary" href="./audit.html">打开 AI 项目自测</a>
+      </div>
+    </section>
+
+    <section class="panel" id="price">
+      <h2>套餐</h2>
+      <div class="grid-3">
+        <div class="card"><h3>2 小时体检</h3><span class="price">999 元</span><p>输出问题清单、风险点、3-5 个下一步动作。</p></div>
+        <div class="card"><h3>半天深度体检</h3><span class="price">1999 元</span><p>输出体检报告、优先级路线、AI 工具链建议。</p></div>
+        <div class="card"><h3>1 天陪跑</h3><span class="price">5000 元</span><p>输出执行计划、陪跑记录、小闭环推进建议。</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>999 元体检能拿到什么</h2>
+      <p>样例报告展示的是脱敏交付形态：问题清单、风险点、下一步动作和是否适合继续 PoC 的判断。它不是完整系统开发承诺，也不包含真实客户隐私。</p>
+      <div class="actions">
+        <a class="button secondary" href="./assets/ai-audit-sample-report.pdf">查看体检报告样例</a>
+        <a class="button secondary" href="./purchase.html">确认启动体检</a>
+      </div>
+    </section>
+
+    <section class="panel" id="process">
+      <h2>执行流程</h2>
+      <div class="steps">
+        <div class="step"><b>1</b><h3>说明背景</h3><p>项目做什么、卡在哪里、已有资料到什么程度。</p></div>
+        <div class="step"><b>2</b><h3>确认范围</h3><p>判断是否适合体检，不适合会直接说明。</p></div>
+        <div class="step"><b>3</b><h3>确认启动</h3><p>确认购买后发送启动确认，按约定时间开始。</p></div>
+        <div class="step"><b>4</b><h3>交付结果</h3><p>交付 Markdown/PDF 报告或陪跑记录。</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>你需要准备</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>项目资料</h3>
+          <ul>
+            <li>项目背景和目标</li>
+            <li>当前卡点</li>
+            <li>可公开或已授权的截图、文档、代码片段</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>希望得到的判断</h3>
+          <ul>
+            <li>下一步先做什么</li>
+            <li>当前技术方案是否有明显风险</li>
+            <li>是否值得继续做 PoC 或系统开发</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>项目类型背书</h2>
+      <p>公开展示只使用脱敏项目类型，不暴露客户、个人、地点、账号、日志、数据库或合同材料。</p>
+      <div class="actions">
+        <a class="button secondary" href="./cases.html">查看项目类型与能力背书</a>
+      </div>
+    </section>
+
+    <section class="panel" id="boundary">
+      <h2>服务边界</h2>
+      <p class="notice">不接违法项目；不登录未授权账号；不索要客户密钥、支付账户或隐私数据；不承诺商业结果；不免费做完整方案；不把 999 元体检包装成完整系统交付。</p>
+    </section>
+
+    <section class="panel contact" id="contact">
+      <h2>联系</h2>
+      <p>先用邮件说明项目背景和当前卡点。确认适合后，再约固定时间电话沟通。</p>
+      <div class="actions">
+        <a class="button secondary" href="mailto:957017253@qq.com?subject=咨询AI项目体检&body=你好，我想咨询AI项目体检。项目背景：%0A当前卡点：%0A希望得到的判断：">发送邮件到 957017253@qq.com</a>
+        <a class="button light" href="./audit.html">先做项目自测</a>
+        <a class="button light" href="./intake.html">填写项目背景</a>
+        <a class="button light" href="./purchase.html">确认启动</a>
+        <a class="button light" href="./assets/ai-audit-sample-report.pdf">查看样例报告</a>
+        <a class="button light" href="./assets/ai-audit-onepager.pdf">查看客户一页纸</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    周宇恒｜AI 开发 / 项目体检｜先文字沟通，确认适合后再安排电话
+  </footer>
+</body>
+</html>
